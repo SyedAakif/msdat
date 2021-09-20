@@ -43,10 +43,10 @@
           </tbody>
         </table>
       </Card>
-      <data-source />
+      <data-source @save-dataSource="saveData"/>
     </section>
     <section>
-      <data-table :indicator="selectedIndicator" />
+      <data-table :indicator="selectedIndicator" :dataSource="selectedDataSource" />
     </section>
   </div>
 </template>
@@ -66,6 +66,7 @@ export default {
       list: true,
       getRmnchList: [],
       selectedIndicator: [],
+      selectedDataSource: []
     };
   },
   computed: {
@@ -109,6 +110,9 @@ export default {
     selectIndicator(e) {
       this.selectedIndicator.push(e.target.value);
     },
+    saveData(data) {
+      this.selectedDataSource = data
+    }
   },
 };
 </script>

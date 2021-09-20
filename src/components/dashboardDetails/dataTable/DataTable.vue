@@ -4,11 +4,15 @@
       <thead>
         <tr style="wid">
           <th>Indicators</th>
+          <th>Data Source</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td style="display: table; border-bottom: 1px solid gray" v-for="ind in indicator" :key="ind">{{ ind }}</td>
+        <tr style="display: table; border-bottom: 1px solid gray">
+          <td  v-for="ind in indicator" :key="ind">
+            {{ ind }}
+          </td>
+          <td v-for="data in dataSource" :key="data">{{ data }}</td>
         </tr>
       </tbody>
     </table>
@@ -17,7 +21,7 @@
 
 <script>
 export default {
-    props: ['indicator']
+  props: ["indicator", "dataSource"],
 };
 </script>
 
