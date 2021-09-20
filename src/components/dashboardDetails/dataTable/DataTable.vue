@@ -2,18 +2,22 @@
   <div style="display: block;">
     <table class="table">
       <thead>
-        <tr style="wid">
+        <tr style="width: 150px; display: flex; justify-content: space-between">
           <th>Indicators</th>
-          <th>Data Source</th>
+          <th >Data Source</th>
         </tr>
       </thead>
       <tbody>
-        <tr style="display: table; border-bottom: 1px solid gray">
-          <td  v-for="ind in indicator" :key="ind">
-            {{ ind }}
+        <tr style="display: table; ">
+          <td style="display: block" v-for="ind in indicator" :key="ind">
+            <th style="background-color: #CEE4E9; padding-right: 86px;">{{ind.parent}}</th>
+            <tr style="border-bottom: 1px solid gray" v-for="child in ind.child" :key="child">{{child}}
+            </tr>
           </td>
-          <td v-for="data in dataSource" :key="data">{{ data }}</td>
-        </tr>
+          </tr>
+          <td>
+          <div style="display: block " v-for="data in dataSource" :key="data">{{ data }}</div>
+        </td>
       </tbody>
     </table>
   </div>
@@ -22,6 +26,13 @@
 <script>
 export default {
   props: ["indicator", "dataSource"],
+
+  data() {
+    return {
+      DataforTable: [],
+    };
+  },
+
 };
 </script>
 

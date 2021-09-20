@@ -53,7 +53,6 @@ export default {
   },
   methods: {
     selectSource(e) {
-      debugger;
       if(e.target.checked){
       this.selectedDataSource.push(e.target.value);
       }else{

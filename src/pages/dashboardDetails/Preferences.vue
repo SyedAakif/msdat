@@ -31,8 +31,7 @@
                   name=""
                   :id="item.id"
                   :value="item.short_name"
-                  v-model="selectedIndicator"
-                  @click="selectIndicator($event)"
+                  @click="selectIndicator($event, items.parent)"
                 />
                 <small>{{ item.short_name }}</small>
               </td>
@@ -43,10 +42,13 @@
           </tbody>
         </table>
       </Card>
-      <data-source @save-dataSource="saveData"/>
+      <data-source @save-dataSource="saveData" />
     </section>
     <section>
-      <data-table :indicator="selectedIndicator" :dataSource="selectedDataSource" />
+      <data-table
+        :indicator="selectedIndicator"
+        :dataSource="selectedDataSource"
+      />
     </section>
   </div>
 </template>
@@ -66,7 +68,8 @@ export default {
       list: true,
       getRmnchList: [],
       selectedIndicator: [],
-      selectedDataSource: []
+      selectedDataSource: [],
+      obj: {},
     };
   },
   computed: {
@@ -99,7 +102,7 @@ export default {
     opennav(value) {
       this.$store.dispatch("indicators/getByProgramAreaData", value);
       this.getRmnchList = this.$store.getters["indicators/getRmnchs"];
-      console.log("Data ", this.getRmnchList);
+      // console.log("Data ", this.getRmnchList);
     },
 
     doesProgramAreaExist(programArea) {
@@ -107,12 +110,34 @@ export default {
         (x) => x.program_area === programArea
       );
     },
-    selectIndicator(e) {
-      this.selectedIndicator.push(e.target.value);
+    selectIndicator(e, parentValue) {
+      if (e.target.checked) {
+        if (this.selectedIndicator.length > 0) {
+          this.selectedIndicator.filter((x) => {
+            if (x.parent == parentValue) {
+              x.child.push(e.target.value);
+            }
+          });
+        } else {
+          this.obj = { child: [e.target.value], parent: parentValue };
+          this.selectedIndicator.push(this.obj);
+        }
+
+        // console.log(this.selectedIndicator);
+      } else {
+        console.log(this.selectedIndicator);
+        var indexOfItemToRemove = this.selectedIndicator
+          .map((indicator) => indicator.child.map(i => i.value))
+          .indexOf(e.target.value);
+        // var indexToRemove = indexOfItemToRemove.map(e => e.child ).indexOf(e.target.value);
+        if (indexOfItemToRemove != -1) {
+          this.selectedIndicator.splice(indexOfItemToRemove, 1);
+        }
+      }
     },
     saveData(data) {
-      this.selectedDataSource = data
-    }
+      this.selectedDataSource = data;
+    },
   },
 };
 </script>
