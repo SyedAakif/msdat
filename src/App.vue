@@ -19,6 +19,7 @@ export default {
 <style>
 * {
   box-sizing: border-box;
+  font-size: 10px;
 }
 
 html {

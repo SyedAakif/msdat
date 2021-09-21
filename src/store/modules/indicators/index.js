@@ -11,6 +11,8 @@ export default{
             rmnchs:[],
             program_area: [],
             SurveyArray: [],
+            levels: {},
+            years: [],
             indicatorValue: ''
         }
     },

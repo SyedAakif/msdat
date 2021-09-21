@@ -4,14 +4,13 @@ export default {
     },
     setRmnchs(state,payload){
         state.rmnchs = payload
-        console.log(payload);
     },
 
     setPArea(state,payload){
-        state.program_area = payload
-        
-
+    state.program_area = payload
     },
+    
+        
 
     // ******** Data Source Selection ***************** // 
     
@@ -27,5 +26,23 @@ export default {
 
     getByProgramAreaData(state, payload) {
         state.indicatorValue = payload
+    },
+
+    // ******** Indicator Levels ***************** // 
+    getLevels(state,payload){   
+        console.log(payload);
+        state.levels = payload;
+    },
+    getYears(state,payload){
+        
+        state.years = payload
+        
+    },
+
+    popLevels(state,payload){
+        const newLevels = state.levels.filter(c => c.id != payload )
+        state.levels = newLevels
+       
     }
+
 }

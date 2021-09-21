@@ -1,12 +1,11 @@
 <template>
-  <div class="">
-    <h5>Maternal and Immunization Tracker Dashboard</h5>
-    <p>
-      This dashboard is to track the state maternal health and immunization of
-      under 5 children across national and subnational levels. This dashboard is
-      owned by the Federal Body of Maternal and Child health, Nigeria.
+  <section style="padding-left: 21px">
+    <h5 >Select your preferences.</h5>
+    <p >
+      Select the Program Areas, Data Sources, Period and Coverage Levels you are interested in.
     </p>
-  </div>
+    <br>
+  </section>
   <div class="main">
     <section class="selector-group">
       <h5>Indicators Selection</h5>
@@ -15,14 +14,14 @@
           <thead v-for="items in heading" :key="items">
             <tr style="display: inline-block">
               <th
-                style="background: #f3f3f3; width: 250px"
+                style="background: #f3f3f3; width: 250px;"
                 @click="opennav(items.parent)"
               >
                 {{ items.parent }}
               </th>
 
               <td
-                style="display: block"
+                style="display: block;font-size:9px;"
                 v-for="item in items.children"
                 :key="item.id"
               >
@@ -31,9 +30,9 @@
                   name=""
                   :id="item.id"
                   :value="item.short_name"
-                  @click="selectIndicator($event, items.parent,item.id)"
+                  @click="selectIndicator($event, items.parent, item.id)"
                 />
-                <small>{{ item.short_name }}</small>
+                {{ item.short_name }}
               </td>
             </tr>
           </thead>
@@ -42,9 +41,10 @@
           </tbody>
         </table>
       </Card>
+      <br> <br>
       <data-source @save-dataSource="saveData" />
     </section>
-    <section>
+    <section style="padding: 5px">
       <data-table
         :indicator="selectedIndicator"
         :dataSource="selectedDataSource"
@@ -102,7 +102,7 @@ export default {
     opennav(value) {
       this.$store.dispatch("indicators/getByProgramAreaData", value);
       this.getRmnchList = this.$store.getters["indicators/getRmnchs"];
-      // console.log("Data ", this.getRmnchList);
+      // ("Data ", this.getRmnchList);
     },
 
     doesProgramAreaExist(programArea) {
@@ -110,41 +110,52 @@ export default {
         (x) => x.program_area === programArea
       );
     },
-    selectIndicator(e, parentValue,childId) {
+    selectIndicator(e, parentValue, childId) {
+      this.$store.dispatch("indicators/loadCoverageLevels", childId);
+      this.$store.dispatch("indicators/loadYears", childId);
+      let levels =  this.$store.getters["indicators/indicatorsLevels"];
+      const years = this.$store.getters["indicators/indicatorsYear"];
       let parentObject = this.getParentEntity(parentValue);
+      console.log(childId);
+      console.log(levels);
       if (e.target.checked) {
-        debugger;
-            let child = {
-            value:e.target.value,
-            id:childId
-          }
-        if(parentObject){
-      
+        let child = {
+          value: e.target.value,
+          levelObj: levels,
+          years: years,
+          id: childId,
+        };
+        console.log(years);
+        if (parentObject) {
           parentObject.childs.push(child);
-        }else if(!parentObject){
+        } else if (!parentObject) {
           parentObject = { childs: [child], parent: parentValue };
           this.selectedIndicator.push(parentObject);
-        
         }
+
         // if (this.selectedIndicator.length > 0) {
         //   this.selectedIndicator.map((x) => {
         //     if (x.parent == parentValue) {
         //       x.child.push(e.target.value);
         //     }
         //   });
-        // } else { 
+        // } else {
         //   this.obj = { child: [e.target.value], parent: parentValue };
         //   this.selectedIndicator.push(this.obj);
         // }
 
-        // console.log(this.selectedIndicator);
+        // (this.selectedIndicator);
       } else {
-        debugger;
-        console.log(this.selectedIndicator);
-        parentObject.childs = parentObject.childs.filter(child=>child.id!=childId);
-        if(parentObject.childs.length == 0){
-          this.selectedIndicator = this.selectedIndicator.filter(ind=>ind.parent!=parentObject.parent)
+        this.selectedIndicator;
+        parentObject.childs = parentObject.childs.filter(
+          (child) => child.id != childId
+        );
+        if (parentObject.childs.length == 0) {
+          this.selectedIndicator = this.selectedIndicator.filter(
+            (ind) => ind.parent != parentObject.parent
+          );
         }
+        // this.$store.dispatch("indicators/dataLevelPop", childId);
         // var indexOfItemToRemove = this.selectedIndicator
         //   .map((indicator) => indicator.child.map(i => i.value))
         //   .indexOf(e.target.value);
@@ -153,19 +164,22 @@ export default {
         //   this.selectedIndicator.splice(indexOfItemToRemove, 1);
         // }
       }
+      ("selectedIndicator");
+      this.selectedIndicator;
     },
     saveData(data) {
       this.selectedDataSource = data;
     },
-     getParentEntity(parentKey){
-       debugger;
-       if(this.selectedIndicator.length>0){
-         let filteredList =  this.selectedIndicator.filter(item=>item.parent === parentKey);
-         if(filteredList && filteredList.length>0){
-           return filteredList[0];
-         }
-       }
-       return null;
+    getParentEntity(parentKey) {
+      if (this.selectedIndicator.length > 0) {
+        let filteredList = this.selectedIndicator.filter(
+          (item) => item.parent === parentKey
+        );
+        if (filteredList && filteredList.length > 0) {
+          return filteredList[0];
+        }
+      }
+      return null;
     },
   },
 };

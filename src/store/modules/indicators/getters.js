@@ -8,7 +8,6 @@ export default {
         return state.rmnchs;
     },
     getprogramArea(state){
-        console.log(state.program_area);
         return state.program_area;
     },
 
@@ -21,4 +20,14 @@ export default {
         
         return state.SurveyArray;
     },
+
+    // ******* Indicators Levels ************** //
+
+    indicatorsLevels(state) {
+        return state.levels
+    },
+    indicatorsYear(state) {
+        return state.years
+    },
+    
 };

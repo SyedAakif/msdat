@@ -23,7 +23,6 @@ export default {
   },
   methods: {
       saveData(data) {
-          console.log(data);
           this.$router.push('/prefrences')
       }
   },

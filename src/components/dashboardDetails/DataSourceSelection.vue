@@ -8,7 +8,7 @@
             {{ items.parent }}
           </th>
           <td
-            style="display: block"
+            style="display: block; font-size: 9px;"
             v-for="item in items.children"
             :key="item.id"
           >
@@ -20,7 +20,7 @@
               v-model="selecteddataSource"
               @click="selectSource($event)"
             />
-            <small>{{ item.datasource }}</small>
+            {{ item.datasource }}
           </td>
         </tr>
       </thead>

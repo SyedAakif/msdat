@@ -106,7 +106,7 @@ input {
   font: inherit;
   padding: 14px;
   background-color: #bcbcbc;
-  color: white;
+  color: rgb(0, 0, 0);
   margin-bottom: 39px;
 }
 

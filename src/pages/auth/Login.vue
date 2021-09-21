@@ -101,7 +101,7 @@ a {
   margin: 6px;
   width: 25%;
   padding: 10px;
-  margin-left: 200px;
+  margin-left: 140px;
 }
 
 a:hover,
@@ -121,7 +121,7 @@ h4 {
 }
 h4:before {
   content: "";
-  width: 150px;
+  width: 131px;
   height: 2px;
   display: block;
   background: gray;
@@ -131,7 +131,7 @@ h4:before {
 }
 h4:after {
   content: "";
-  width: 150px;
+  width: 129px;
   height: 2px;
   display: block;
   background: gray;
