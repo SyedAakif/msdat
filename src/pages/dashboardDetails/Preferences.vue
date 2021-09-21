@@ -31,7 +31,7 @@
                   name=""
                   :id="item.id"
                   :value="item.short_name"
-                  @click="selectIndicator($event, items.parent)"
+                  @click="selectIndicator($event, items.parent,item.id)"
                 />
                 <small>{{ item.short_name }}</small>
               </td>
@@ -110,33 +110,62 @@ export default {
         (x) => x.program_area === programArea
       );
     },
-    selectIndicator(e, parentValue) {
+    selectIndicator(e, parentValue,childId) {
+      let parentObject = this.getParentEntity(parentValue);
       if (e.target.checked) {
-        if (this.selectedIndicator.length > 0) {
-          this.selectedIndicator.filter((x) => {
-            if (x.parent == parentValue) {
-              x.child.push(e.target.value);
-            }
-          });
-        } else {
-          this.obj = { child: [e.target.value], parent: parentValue };
-          this.selectedIndicator.push(this.obj);
+        debugger;
+            let child = {
+            value:e.target.value,
+            id:childId
+          }
+        if(parentObject){
+      
+          parentObject.childs.push(child);
+        }else if(!parentObject){
+          parentObject = { childs: [child], parent: parentValue };
+          this.selectedIndicator.push(parentObject);
+        
         }
+        // if (this.selectedIndicator.length > 0) {
+        //   this.selectedIndicator.map((x) => {
+        //     if (x.parent == parentValue) {
+        //       x.child.push(e.target.value);
+        //     }
+        //   });
+        // } else { 
+        //   this.obj = { child: [e.target.value], parent: parentValue };
+        //   this.selectedIndicator.push(this.obj);
+        // }
 
         // console.log(this.selectedIndicator);
       } else {
+        debugger;
         console.log(this.selectedIndicator);
-        var indexOfItemToRemove = this.selectedIndicator
-          .map((indicator) => indicator.child.map(i => i.value))
-          .indexOf(e.target.value);
-        // var indexToRemove = indexOfItemToRemove.map(e => e.child ).indexOf(e.target.value);
-        if (indexOfItemToRemove != -1) {
-          this.selectedIndicator.splice(indexOfItemToRemove, 1);
+        parentObject.childs = parentObject.childs.filter(child=>child.id!=childId);
+        if(parentObject.childs.length == 0){
+          this.selectedIndicator = this.selectedIndicator.filter(ind=>ind.parent!=parentObject.parent)
         }
+        // var indexOfItemToRemove = this.selectedIndicator
+        //   .map((indicator) => indicator.child.map(i => i.value))
+        //   .indexOf(e.target.value);
+        // // var indexToRemove = indexOfItemToRemove.map(e => e.child ).indexOf(e.target.value);
+        // if (indexOfItemToRemove != -1) {
+        //   this.selectedIndicator.splice(indexOfItemToRemove, 1);
+        // }
       }
     },
     saveData(data) {
       this.selectedDataSource = data;
+    },
+     getParentEntity(parentKey){
+       debugger;
+       if(this.selectedIndicator.length>0){
+         let filteredList =  this.selectedIndicator.filter(item=>item.parent === parentKey);
+         if(filteredList && filteredList.length>0){
+           return filteredList[0];
+         }
+       }
+       return null;
     },
   },
 };
