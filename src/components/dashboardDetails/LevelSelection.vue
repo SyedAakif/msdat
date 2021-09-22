@@ -1,23 +1,26 @@
 <template>
-  <h5 style="margin-top: 2px">Level Selection</h5>
   <Card>
-    <table>
-      <thead v-for="(level, index) in levels" :key="index">
-        <tr>
-          <td style="display: inline; font-size: 9px">
-            <input
-              type="checkbox"
-              :id="index"
-              :value="level"
-              v-model="selectedLocation"
-              @click="selectLevel($event)"
-            />
-            {{ level }}
-          </td>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <h5 style="font-size: 14px;">Level Selection</h5>
+    <ul
+      v-for="(level, index) in levels"
+      :key="index"
+      style="
+        list-style: none;
+        display: inline-block;
+        justify-content: space-around;
+      "
+    >
+      <li style="display: inline; font-size: 12px">
+        <input
+          type="checkbox"
+          :id="index"
+          :value="level"
+          v-model="selectedLocation"
+          @click="selectLevel($event)"
+        />
+        {{ level }}
+      </li>
+    </ul>
   </Card>
 </template>
 

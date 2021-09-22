@@ -1,12 +1,12 @@
 <template>
   <div>
-    <table class="" style="width: 1000px; margin-bottom: 300px">
+    <table class="table">
       <thead>
         <tr style="">
-          <th>Indicators</th>
-          <th>Data Source</th>
-          <th>Levels</th>
-          <th>Years</th>
+          <th class="col">Indicators</th>
+          <th class="col">Data Source</th>
+          <th class="col">Levels</th>
+          <th class="col">Years</th>
         </tr>
       </thead>
       <tbody v-for="ind in indicator" :key="ind">
@@ -35,14 +35,14 @@
               {{ ind_levels }}
             </div>
           </td>
-          <td
-            v-for="year in years"
-            :key="year"
-            style="border-bottom: 1px solid gray; display: inline-block"
-          >
-            <div>
-              <div>{{ year }}</div>
-            </div>
+          <td style="border-bottom: 1px solid gray; width:200px;">
+            <ul v-for="year in years" :key="year" style="
+        list-style: none;
+        display: inline-block;
+">
+              <li>{{ year }}</li>
+            </ul>
+            
           </td>
         </tr>
         <tr style=""></tr>

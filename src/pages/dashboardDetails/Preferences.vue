@@ -1,61 +1,60 @@
 <template>
-  <section style="padding-left: 21px">
-    <h5>Select your preferences.</h5>
-    <p>
-      Select the Program Areas, Data Sources, Period and Coverage Levels you are
-      interested in.
-    </p>
-    <br />
-  </section>
-  <div class="main">
-    <section class="selector-group">
-      <h5>Indicators Selection</h5>
-      <Card>
-        <table>
-          <thead v-for="items in heading" :key="items">
-            <tr style="display: inline-block">
-              <th
-                style="background: #f3f3f3; width: 250px"
-                @click="opennav(items.parent)"
-              >
-                {{ items.parent }}
-              </th>
+  <div class="container " >
+    <section class="row">
+      <h5>Select your preferences.</h5>
+      <p>
+        Select the Program Areas, Data Sources, Period and Coverage Levels you
+        are interested in.
+      </p>
 
-              <td
-                style="display: block; font-size: 9px"
-                v-for="item in items.children"
-                :key="item.id"
-              >
-                <input
-                  type="checkbox"
-                  name=""
-                  :id="item.id"
-                  :value="item.short_name"
-                  @click="selectIndicator($event, items.parent, item.id)"
-                />
-                {{ item.short_name }}
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr></tr>
-          </tbody>
-        </table>
-      </Card>
-      <br />
-      <br />
-      <data-source @save-dataSource="saveData" />
-        <years-selection @save-year="ClickedYear" />
-        <level-selection @save-level="clickedLevel" />
     </section>
-    <section style="padding: 5px">
-      <data-table
-        :indicator="selectedIndicator"
-        :dataSource="selectedDataSource"
-        :level="selectedLevel"
-        :years="selectedYear"
-      />
-    </section>
+    <div class="row border border-dark" >
+
+      <section class="col-3 border-right border-dark">
+        <div class="row p-2">
+          <Card>
+            <h5 style="font-size: 14px;">Indicators Selection</h5>
+            <ul v-for="items in heading" :key="items" style="list-style:none; margin-left: -25px;" >
+              <li style="background: #f3f3f3;">
+                {{ items.parent }}
+   
+              </li>
+              <li>
+                <ul v-for="item in items.children" :key="item.id" style="list-style:none; ">
+                  <li>
+                    <input
+                      type="checkbox"
+                      name=""
+                      :id="item.id"
+                      :value="item.short_name"
+                      @click="selectIndicator($event, items.parent, item.id)"
+                    />
+                    {{ item.short_name }}
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </Card>
+        </div>
+        <div class="row p-2">
+          <data-source @save-dataSource="saveData" />
+        </div>
+        <div class="row p-2">
+          <years-selection @save-year="ClickedYear" />
+        </div>
+        <div class="row p-2">
+          <level-selection @save-level="clickedLevel" />
+        </div>
+      </section>
+      <section class="col-9" style="border-left: 1px solid">
+        <data-table
+          :indicator="selectedIndicator"
+          :dataSource="selectedDataSource"
+          :level="selectedLevel"
+          :years="selectedYear"
+        />
+      </section>
+    </div>
   </div>
 </template>
 
@@ -173,27 +172,5 @@ export default {
 </script>
 
 <style scoped>
-.main {
-  display: flex;
-  align-items: center;
-  border: 1px solid rgb(156, 154, 154);
-  margin: -11px 15px 0 10px;
-}
-.selector-group {
-  border-right: 1px solid rgb(156, 154, 154);
-  margin-left: 5px;
-  padding-right: 5px;
-  width: 248px;
-  position: relative;
-}
-.footer[data-v-d9ddb592] {
-  width: 100%;
-  height: 0 !important;
-  background-color: #004a61;
-  display: none !important;
-  justify-content: right;
-  align-items: right;
-  position: fixed;
-  bottom: 0;
-}
+
 </style>

@@ -1,12 +1,17 @@
 <template>
-  <h5 style="margin-top: 2px">Period Selection</h5>
-  <!-- <p>Select availaible Years under each source.</p> -->
-  <br>
   <Card>
-    <table>
-      <thead v-for="(year, index) in years" :key="index">
-        <tr style="display: inline-block;">
-          <td style=" font-size: 9px">
+    <h5 style="font-size: 14px;">Period Selection</h5>
+    <!-- <p>Select availaible Years under each source.</p> -->
+      <ul
+        v-for="(year, index) in years"
+        :key="index"
+        style="
+          list-style: none;
+          display: inline-block;
+          justify-content: space-around;
+        "
+      >
+        <li style="display: inline-block">
             <input
               type="checkbox"
               :id="index"
@@ -15,11 +20,8 @@
               @click="selectYear($event)"
             />
             {{ year }}
-          </td>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+        </li>
+      </ul>
   </Card>
 </template>
 

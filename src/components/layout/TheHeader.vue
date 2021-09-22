@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header class="row">
     <slot></slot>
   </header>
 </template>
@@ -14,7 +14,7 @@ header {
   align-items: center;
 }
 
-header a {
+#header #a {
   text-decoration: none;
   color: #f391e3;
   display: inline-block;
