@@ -1,10 +1,11 @@
 <template>
   <section style="padding-left: 21px">
-    <h5 >Select your preferences.</h5>
-    <p >
-      Select the Program Areas, Data Sources, Period and Coverage Levels you are interested in.
+    <h5>Select your preferences.</h5>
+    <p>
+      Select the Program Areas, Data Sources, Period and Coverage Levels you are
+      interested in.
     </p>
-    <br>
+    <br />
   </section>
   <div class="main">
     <section class="selector-group">
@@ -41,7 +42,8 @@
           </tbody>
         </table>
       </Card>
-      <br> <br>
+      <br />
+      <br />
       <data-source @save-dataSource="saveData" />
     </section>
     <section style="padding: 5px">
@@ -57,6 +59,7 @@
 import Card from "../../components/Card.vue";
 import DataSource from "../../components/dashboardDetails/DataSourceSelection.vue";
 import DataTable from "../../components/dashboardDetails/dataTable/DataTable.vue";
+import axios from "axios";
 export default {
   components: {
     Card,
@@ -111,40 +114,38 @@ export default {
       );
     },
     selectIndicator(e, parentValue, childId) {
-      this.$store.dispatch("indicators/loadCoverageLevels", childId);
-      this.$store.dispatch("indicators/loadYears", childId);
-      let levels =  this.$store.getters["indicators/indicatorsLevels"];
+      debugger;
+
+      //this.$store.dispatch("indicators/loadYears", childId);
+      // let levels =  this.$store.getters["indicators/indicatorsLevels"];
       const years = this.$store.getters["indicators/indicatorsYear"];
       let parentObject = this.getParentEntity(parentValue);
       console.log(childId);
-      console.log(levels);
+      // console.log(levels);
       if (e.target.checked) {
-        let child = {
-          value: e.target.value,
-          levelObj: levels,
-          years: years,
-          id: childId,
-        };
-        console.log(years);
-        if (parentObject) {
-          parentObject.childs.push(child);
-        } else if (!parentObject) {
-          parentObject = { childs: [child], parent: parentValue };
-          this.selectedIndicator.push(parentObject);
-        }
-
-        // if (this.selectedIndicator.length > 0) {
-        //   this.selectedIndicator.map((x) => {
-        //     if (x.parent == parentValue) {
-        //       x.child.push(e.target.value);
-        //     }
-        //   });
-        // } else {
-        //   this.obj = { child: [e.target.value], parent: parentValue };
-        //   this.selectedIndicator.push(this.obj);
-        // }
-
-        // (this.selectedIndicator);
+        Promise.all([this.getLevels(childId), this.getyearsAvailable(childId)])
+          .then(function(responses) {
+            let levels = responses[0].data;
+            let years = responses[1].data;
+            this.$store.dispatch("indicators/loadYears", years);
+            this.$store.dispatch("indicators/loadCoverageLevels", levels);
+            
+            let child = {
+              value: e.target.value,
+              
+              id: childId,
+            };
+            console.log(years);
+            if (parentObject) {
+              parentObject.childs.push(child);
+            } else if (!parentObject) {
+              parentObject = { childs: [child], parent: parentValue };
+              this.selectedIndicator.push(parentObject);
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
       } else {
         this.selectedIndicator;
         parentObject.childs = parentObject.childs.filter(
@@ -155,17 +156,7 @@ export default {
             (ind) => ind.parent != parentObject.parent
           );
         }
-        // this.$store.dispatch("indicators/dataLevelPop", childId);
-        // var indexOfItemToRemove = this.selectedIndicator
-        //   .map((indicator) => indicator.child.map(i => i.value))
-        //   .indexOf(e.target.value);
-        // // var indexToRemove = indexOfItemToRemove.map(e => e.child ).indexOf(e.target.value);
-        // if (indexOfItemToRemove != -1) {
-        //   this.selectedIndicator.splice(indexOfItemToRemove, 1);
-        // }
       }
-      ("selectedIndicator");
-      this.selectedIndicator;
     },
     saveData(data) {
       this.selectedDataSource = data;
@@ -180,6 +171,19 @@ export default {
         }
       }
       return null;
+    },
+    getyearsAvailable(childId) {
+      return axios.get(
+        "http://135.181.212.168:9234/api/crud/indicators/" +
+          childId +
+          "/years_available/"
+      );
+    },
+    getLevels(payload) {
+      return axios.get(
+        "http://135.181.212.168:9234/api/crud/datasource_specific_indicator/" +
+          payload
+      );
     },
   },
 };

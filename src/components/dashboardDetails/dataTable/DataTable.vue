@@ -26,8 +26,10 @@
           <td style="border-bottom: 1px solid gray">
             <div v-for="data in dataSource" :key="data">{{ data }}</div>
           </td>
-          <td style="border-bottom: 1px solid gray">
-            <div>{{ child.levelObj.data_level }}</div>
+          <td  style="border-bottom: 1px solid gray">
+            <div v-for="ind_levels in indicatorsLevels" :key="ind_levels">
+            <div v-if="ind_levels.id === child.id">{{ ind_levels.data_level }}</div>
+            </div>
           </td>
           <td
             v-for="year in child.years.years"
@@ -54,12 +56,13 @@ export default {
   //     levelData: [],
   //   };
   // },
-  //     computed: {
-  //       indicatorsLevels(){
-  //           return this.levelData.filter()
-  //       }
+      computed: {
+        indicatorsLevels(){
+          debugger;
+            return this.$store.getters["indicators/indicatorsLevels"];
+        }
 
-  //     },
+      },
   // //   watch: {
   // //     abc() {
   // //       if (this.levelData) {

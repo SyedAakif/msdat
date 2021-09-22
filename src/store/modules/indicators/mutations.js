@@ -31,7 +31,8 @@ export default {
     // ******** Indicator Levels ***************** // 
     getLevels(state,payload){   
         console.log(payload);
-        state.levels = payload;
+        debugger;
+        state.levels.push(payload);
     },
     getYears(state,payload){
         
