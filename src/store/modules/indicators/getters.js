@@ -27,6 +27,8 @@ export default {
         return state.levels
     },
     indicatorsYear(state) {
+        console.log("State Years Get");
+        console.log(state.years);
         return state.years
     },
     

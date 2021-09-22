@@ -50,14 +50,24 @@ export default {
             });
 
     },
-     loadCoverageLevels({ commit }, payload) {
-        commit('getLevels', payload)
+    async loadCoverageLevels({ commit }, payload) {
+        await axios.get('http://135.181.212.168:9234/api/crud/datasource_specific_indicator/'+ payload)
+            .then(res => {
+                let data = res.data
+                
+            console.log(data);
+                commit('getLevels', data)
+            })
+    },
 
-},
+    async loadYears({ commit }, payload) {
+        await axios.get('http://135.181.212.168:9234/api/crud/indicators/'+payload+'/years_available/')
+            .then(res => {
+                const data = res.data
+                
 
-    loadYears({ commit }, payload) {
-        commit('getYears', payload);
-        
+                commit('getYears', data)
+            })
     },
 
     

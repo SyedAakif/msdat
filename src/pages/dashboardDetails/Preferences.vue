@@ -15,14 +15,14 @@
           <thead v-for="items in heading" :key="items">
             <tr style="display: inline-block">
               <th
-                style="background: #f3f3f3; width: 250px;"
+                style="background: #f3f3f3; width: 250px"
                 @click="opennav(items.parent)"
               >
                 {{ items.parent }}
               </th>
 
               <td
-                style="display: block;font-size:9px;"
+                style="display: block; font-size: 9px"
                 v-for="item in items.children"
                 :key="item.id"
               >
@@ -45,11 +45,15 @@
       <br />
       <br />
       <data-source @save-dataSource="saveData" />
+        <years-selection @save-year="ClickedYear" />
+        <level-selection @save-level="clickedLevel" />
     </section>
     <section style="padding: 5px">
       <data-table
         :indicator="selectedIndicator"
         :dataSource="selectedDataSource"
+        :level="selectedLevel"
+        :years="selectedYear"
       />
     </section>
   </div>
@@ -58,13 +62,16 @@
 <script>
 import Card from "../../components/Card.vue";
 import DataSource from "../../components/dashboardDetails/DataSourceSelection.vue";
+import LevelSelection from "../../components/dashboardDetails/LevelSelection.vue";
+import YearsSelection from "../../components/dashboardDetails/YearsSelection.vue";
 import DataTable from "../../components/dashboardDetails/dataTable/DataTable.vue";
-import axios from "axios";
 export default {
   components: {
     Card,
     DataSource,
     DataTable,
+    LevelSelection,
+    YearsSelection,
   },
   data() {
     return {
@@ -72,7 +79,10 @@ export default {
       getRmnchList: [],
       selectedIndicator: [],
       selectedDataSource: [],
+      selectedLevel: [],
+      selectedYear: [],
       obj: {},
+      showList: false,
     };
   },
   computed: {
@@ -83,10 +93,6 @@ export default {
       return this.$store.getters["indicators/indicators"];
     },
   },
-
-  // mounted() {
-  //     this.indicatorsList()
-  // },
 
   created() {
     this.loadIndicators();
@@ -105,7 +111,6 @@ export default {
     opennav(value) {
       this.$store.dispatch("indicators/getByProgramAreaData", value);
       this.getRmnchList = this.$store.getters["indicators/getRmnchs"];
-      // ("Data ", this.getRmnchList);
     },
 
     doesProgramAreaExist(programArea) {
@@ -114,38 +119,21 @@ export default {
       );
     },
     selectIndicator(e, parentValue, childId) {
-      debugger;
-
-      //this.$store.dispatch("indicators/loadYears", childId);
-      // let levels =  this.$store.getters["indicators/indicatorsLevels"];
-      const years = this.$store.getters["indicators/indicatorsYear"];
+      this.$store.dispatch("indicators/loadCoverageLevels", childId);
+      this.$store.dispatch("indicators/loadYears", childId);
       let parentObject = this.getParentEntity(parentValue);
       console.log(childId);
-      // console.log(levels);
       if (e.target.checked) {
-        Promise.all([this.getLevels(childId), this.getyearsAvailable(childId)])
-          .then(function(responses) {
-            let levels = responses[0].data;
-            let years = responses[1].data;
-            this.$store.dispatch("indicators/loadYears", years);
-            this.$store.dispatch("indicators/loadCoverageLevels", levels);
-            
-            let child = {
-              value: e.target.value,
-              
-              id: childId,
-            };
-            console.log(years);
-            if (parentObject) {
-              parentObject.childs.push(child);
-            } else if (!parentObject) {
-              parentObject = { childs: [child], parent: parentValue };
-              this.selectedIndicator.push(parentObject);
-            }
-          })
-          .catch(function(error) {
-            console.log(error);
-          });
+        let child = {
+          value: e.target.value,
+          id: childId,
+        };
+        if (parentObject) {
+          parentObject.childs.push(child);
+        } else if (!parentObject) {
+          parentObject = { childs: [child], parent: parentValue };
+          this.selectedIndicator.push(parentObject);
+        }
       } else {
         this.selectedIndicator;
         parentObject.childs = parentObject.childs.filter(
@@ -157,9 +145,17 @@ export default {
           );
         }
       }
+      ("selectedIndicator");
+      this.selectedIndicator;
     },
     saveData(data) {
       this.selectedDataSource = data;
+    },
+    clickedLevel(data) {
+      this.selectedLevel = data;
+    },
+    ClickedYear(data) {
+      this.selectedYear = data;
     },
     getParentEntity(parentKey) {
       if (this.selectedIndicator.length > 0) {
@@ -171,19 +167,6 @@ export default {
         }
       }
       return null;
-    },
-    getyearsAvailable(childId) {
-      return axios.get(
-        "http://135.181.212.168:9234/api/crud/indicators/" +
-          childId +
-          "/years_available/"
-      );
-    },
-    getLevels(payload) {
-      return axios.get(
-        "http://135.181.212.168:9234/api/crud/datasource_specific_indicator/" +
-          payload
-      );
     },
   },
 };

@@ -13,8 +13,12 @@
         <tr style="">
           <td
             colspan="4"
-            style="background-color: #cee4e9; padding: 4px; font-size: 10px;
-    font-weight: bold;"
+            style="
+              background-color: #cee4e9;
+              padding: 4px;
+              font-size: 10px;
+              font-weight: bold;
+            "
           >
             {{ ind.parent }}
           </td>
@@ -26,13 +30,13 @@
           <td style="border-bottom: 1px solid gray">
             <div v-for="data in dataSource" :key="data">{{ data }}</div>
           </td>
-          <td  style="border-bottom: 1px solid gray">
-            <div v-for="ind_levels in indicatorsLevels" :key="ind_levels">
-            <div v-if="ind_levels.id === child.id">{{ ind_levels.data_level }}</div>
+          <td style="border-bottom: 1px solid gray">
+            <div v-for="ind_levels in level" :key="ind_levels">
+              {{ ind_levels }}
             </div>
           </td>
           <td
-            v-for="year in child.years.years"
+            v-for="year in years"
             :key="year"
             style="border-bottom: 1px solid gray; display: inline-block"
           >
@@ -49,20 +53,19 @@
 
 <script>
 export default {
-  props: ["indicator", "dataSource"],
+  props: ["indicator", "dataSource", "level", "years"],
 
   // data() {
   //   return {
   //     levelData: [],
   //   };
   // },
-      computed: {
-        indicatorsLevels(){
-          debugger;
-            return this.$store.getters["indicators/indicatorsLevels"];
-        }
-
-      },
+  // computed: {
+  //   indicatorsLevels() {
+  //     // debugger;
+  //     return this.$store.getters["indicators/indicatorsLevels"];
+  //   },
+  // },
   // //   watch: {
   // //     abc() {
   // //       if (this.levelData) {
