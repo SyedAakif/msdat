@@ -1,8 +1,7 @@
 <template>
   <the-header />
   <router-view></router-view>
-  <br>
-  <the-footer />
+  <the-footer class="fixed-bottom" />
 </template>
 
 <script>

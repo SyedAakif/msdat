@@ -1,46 +1,53 @@
 <template>
   <form @submit.prevent="submitForm">
-    <div>
-      <div class="form-control" :class="{ invalid: !dName.isValid }">
-        <label for="d-Name">Give your dashboard a name</label>
-        <input
-          type="text"
-          id="d-Name"
-          v-model.trim="dName.val"
-          @blur="clearValidity('dName')"
-          placeholder="Hint: It should be Easy to Understand"
-        />
-        <p v-if="!dName.isValid">This must not be empty.</p>
+    <div class="row">
+      <div class="col-6 bg-danger">
+        <div class="form-group" :class="{ invalid: !dName.isValid }">
+          <label for="d-Name">Give your dashboard a name</label>
+          <input
+            type="text"
+            id="d-Name"
+            v-model.trim="dName.val"
+            @blur="clearValidity('dName')"
+            placeholder="Hint: It should be Easy to Understand"
+            class="form-control"
+          />
+          <p v-if="!dName.isValid">This must not be empty.</p>
+        </div>
+        <div class="form-group" :class="{ invalid: !description.isValid }">
+          <label for="description">Description of your dashboard</label>
+          <input
+            type="text"
+            id="description"
+            v-model.trim="description.val"
+            @blur="clearValidity('description')"
+            placeholder="Hint: Use easy to Understand terms"
+            class="form-control"
+          />
+          <p v-if="!description.isValid">This must not be empty.</p>
+          <slot></slot>
+        </div>
       </div>
-      <div class="form-control" :class="{ invalid: !description.isValid }">
-        <label for="description">Description of your dashboard</label>
-        <input
-          type="text"
-          id="description"
-          v-model.trim="description.val"
-          @blur="clearValidity('description')"
-          placeholder="Hint: Use easy to Understand terms"
-        />
-        <p v-if="!description.isValid">This must not be empty.</p>
-      <div style="display: inline; padding-left: 20%">
-        <input type="file" />
-      </div>
+
+      <div class="col-6 bg-info p-5">
+        <input type="image" :src="image" class="form-control" v-model="image"/>
       </div>
     </div>
-    <!-- <input type="file" name="" id=""> -->
-    <slot></slot>
-    <div>
-      <button>SELECT INDIVIDUAL DATA</button>
-      <span>I know the exact data I want.</span>
-      <span>I will choose just the ones I need.</span>
+    <div class="col">
+      <button class="bg-primary mt-4">SELECT INDIVIDUAL DATA</button>
+      <span class="row">I know the exact data I want.</span>
+      <span class="row">I will choose just the ones I need.</span>
     </div>
   </form>
+
+  <!-- <input type="file" name="" id=""> -->
 </template>
 
 <script>
 export default {
   data() {
     return {
+      image: 'https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80',
       dName: {
         val: "",
         isValid: true,
@@ -86,7 +93,7 @@ export default {
 </script>
 
 <style scoped>
-.form-control {
+/* .form-control {
   margin-bottom: 5px;
 }
 
@@ -151,6 +158,5 @@ button:active {
 .invalid input,
 .invalid textarea {
   border: 1px solid red;
-}
-
+} */
 </style>

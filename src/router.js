@@ -7,6 +7,7 @@ import Prefrences from './pages/dashboardDetails/Preferences'
 const router = createRouter({
     history: createWebHistory(),
     routes: [
+        { path: '/', component: Login },
         { path: '/login', component: Login },
         { path: '/inputDetails', component: InputDetails },
         { path: '/prefrences', component: Prefrences }
