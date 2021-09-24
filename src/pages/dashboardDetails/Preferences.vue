@@ -39,10 +39,10 @@
         <div class="row p-2">
           <data-source @save-dataSource="saveData" />
         </div>
-        <div class="row p-2">
+        <div v-if="showList" class="row p-2">
           <years-selection @save-year="ClickedYear" />
         </div>
-        <div class="row p-2">
+        <div v-if="showList" class="row p-2">
           <level-selection @save-level="clickedLevel" />
         </div>
       </section>
@@ -127,6 +127,7 @@ export default {
           value: e.target.value,
           id: childId,
         };
+          this.showList = true;
         if (parentObject) {
           parentObject.childs.push(child);
         } else if (!parentObject) {
@@ -139,6 +140,7 @@ export default {
           (child) => child.id != childId
         );
         if (parentObject.childs.length == 0) {
+          this.showList = false
           this.selectedIndicator = this.selectedIndicator.filter(
             (ind) => ind.parent != parentObject.parent
           );
